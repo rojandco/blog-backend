@@ -1,3 +1,4 @@
+const moment = require('moment');
 const httpStatus = require('http-status');
 const catchAsync = require('../utils/catchAsync');
 const { authService, userService, tokenService, emailService } = require('../services');
@@ -12,7 +13,15 @@ const login = catchAsync(async (req, res) => {
   const { email, password } = req.body;
   const user = await authService.loginUserWithEmailAndPassword(email, password);
   const tokens = await tokenService.generateAuthTokens(user);
-  res.send({ user, tokens });
+  res.setHeader(
+    'Set-Cookie',
+    `token=${tokens.access.token}; HttpOnly; SameSite=Lax; Expires=${moment(tokens.access.expires).toDate()}`
+  );
+  res.setHeader(
+    'Set-Cookie',
+    `refresh_token=${tokens.refresh.token}; HttpOnly; SameSite=Lax; Expires=${moment(tokens.refresh.expires).toDate()}`
+  );
+  res.send({ user });
 });
 
 const logout = catchAsync(async (req, res) => {
