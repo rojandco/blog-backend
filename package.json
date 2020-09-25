@@ -1,5 +1,5 @@
 {
-  "name": "node-express-mongoose-boilerplate",
+  "name": "blog-backend",
   "version": "1.4.1",
   "description": "A boilerplate for building production-ready RESTful APIs using Node.js, Express, and Mongoose",
   "main": "src/index.js",
